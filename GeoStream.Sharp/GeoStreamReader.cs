@@ -2,15 +2,17 @@ using System.IO;
 using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
 using PeterO.Cbor;
 
-
 namespace GeoStream.Sharp;
+
 public class GeoStreamReader
 {
     private BinaryReader stream;
+
     // Header Info
     public uint Version { get; }
     public uint SRID { get; }
     public uint PropertiesLength { get; }
+    public CBORObject? Properties { get; }
 
     public GeoStreamReader(BinaryReader binaryReader)
     {
@@ -22,7 +24,12 @@ public class GeoStreamReader
         // Sanity Checks
         if (this.PropertiesLength > 0)
         {
-            this.stream.ReadBytes((int)this.PropertiesLength);
+            var propBytes = this.stream.ReadBytes((int)this.PropertiesLength);
+            this.Properties = CBORObject.DecodeFromBytes(propBytes);
+        }
+        else
+        {
+            this.Properties = null;
         }
         if (this.SRID != 4326)
         {
@@ -40,7 +47,9 @@ public class GeoStreamReader
     {
         var instance = new NetTopologySuite.NtsGeometryServices(
             NetTopologySuite.Geometries.Implementation.CoordinateArraySequenceFactory.Instance,
-            new NetTopologySuite.Geometries.PrecisionModel(NetTopologySuite.Geometries.PrecisionModels.Floating),
+            new NetTopologySuite.Geometries.PrecisionModel(
+                NetTopologySuite.Geometries.PrecisionModels.Floating
+            ),
             (int)this.SRID,
             NetTopologySuite.Geometries.GeometryOverlay.Legacy,
             new NetTopologySuite.Geometries.CoordinateEqualityComparer()
@@ -48,7 +57,8 @@ public class GeoStreamReader
         var rdr = new NetTopologySuite.IO.WKBReader(instance);
         while (true)
         {
-            uint next_length, _;
+            uint next_length,
+                _;
             byte[] zippedBytes;
             try
             {
@@ -63,9 +73,12 @@ public class GeoStreamReader
 
             var zippedStream = new MemoryStream(zippedBytes);
             var decompressor = new InflaterInputStream(zippedStream);
-            var cborFeature = CBORObject.Read(decompressor);
-            var properties = cborFeature["properties"];
-            var geometry = rdr.Read(cborFeature["geometry"].GetByteString());
+            var cborByteStream = new MemoryStream();
+            decompressor.CopyTo(cborByteStream);
+            var cborBytes = cborByteStream.ToArray();
+            var cborFeature = CBORObject.DecodeFromBytes(cborBytes);
+            var properties = cborFeature[Feature.PROPERTIES];
+            var geometry = rdr.Read(cborFeature[Feature.GEOMETRY].GetByteString());
             var feature = new Feature(geometry, properties);
             yield return feature;
         }
