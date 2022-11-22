@@ -12,8 +12,10 @@ public struct Feature
     }
 
     public Geometry Geometry { get; set; }
-    public int SRID {
-        get {
+    public int SRID
+    {
+        get
+        {
             return this.Geometry.SRID;
         }
     }

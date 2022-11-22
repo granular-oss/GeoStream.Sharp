@@ -27,7 +27,7 @@ public class GeoStreamReader
             throw new InvalidDataException("Version not 4");
         }
     }
-    
+
     private void readHeader()
     {
         this.Version = this.stream.ReadUInt32();
@@ -53,12 +53,14 @@ public class GeoStreamReader
         {
             uint next_length, _;
             byte[] zippedBytes;
-            try {
+            try
+            {
                 next_length = this.stream.ReadUInt32();
                 zippedBytes = this.stream.ReadBytes((int)next_length);
                 _ = this.stream.ReadUInt32(); // same length for reverse reading
             }
-            catch (EndOfStreamException) {
+            catch (EndOfStreamException)
+            {
                 yield break;
             }
 
