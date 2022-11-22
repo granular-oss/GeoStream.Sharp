@@ -16,7 +16,7 @@ public class GeoStreamWriter
         this.stream.Write((uint)4326); // SRID 4326
         if (properties == null)
         {
-            this.stream.Write((uint)0); // SRID 4326
+            this.stream.Write((uint)0);
         }
         else
         {
@@ -29,6 +29,12 @@ public class GeoStreamWriter
 
     public void WriteFeature(Feature feature)
     {
+        if (feature.SRID != 4326 || feature.SRID == -1)
+        {
+            throw new ArgumentException(
+                string.Format("feature has invalid SRID {0}", feature.SRID)
+            );
+        }
         var cborToDump = CBORObject
             .NewMap()
             .Add(Feature.GEOMETRY, feature.WKB)
