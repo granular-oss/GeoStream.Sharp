@@ -8,14 +8,22 @@ public class GeoStreamReader
 {
     private BinaryReader stream;
     // Header Info
-    public uint Version { get; private set; }
-    public uint SRID { get; private set; }
-    public uint PropertiesLength { get; private set; }
+    public uint Version { get; }
+    public uint SRID { get; }
+    public uint PropertiesLength { get; }
 
     public GeoStreamReader(BinaryReader binaryReader)
     {
         this.stream = binaryReader;
-        this.readHeader();
+        // Read Header
+        this.Version = this.stream.ReadUInt32();
+        this.SRID = this.stream.ReadUInt32();
+        this.PropertiesLength = this.stream.ReadUInt32();
+        // Sanity Checks
+        if (this.PropertiesLength > 0)
+        {
+            this.stream.ReadBytes((int)this.PropertiesLength);
+        }
         if (this.SRID != 4326)
         {
             // probably something better but this works
@@ -25,17 +33,6 @@ public class GeoStreamReader
         {
             // probably something better but this works
             throw new InvalidDataException("Version not 4");
-        }
-    }
-
-    private void readHeader()
-    {
-        this.Version = this.stream.ReadUInt32();
-        this.SRID = this.stream.ReadUInt32();
-        this.PropertiesLength = this.stream.ReadUInt32();
-        if (this.PropertiesLength > 0)
-        {
-            this.stream.ReadBytes((int)this.PropertiesLength);
         }
     }
 

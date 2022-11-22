@@ -12,7 +12,8 @@ class Program
             var geoStream = new GeoStreamReader(binaryReader);
             foreach (var feature in geoStream.Features())
             {
-                Console.WriteLine(feature);
+                var jsonStr = feature.AsGeoJson();
+                Console.WriteLine(jsonStr);
             }
         }
 
