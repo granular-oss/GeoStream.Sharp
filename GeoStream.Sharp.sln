@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeoStream.Sharp", "GeoStream.Sharp\GeoStream.Sharp.csproj", "{CD7492EC-5F9F-4D09-882D-A169A8DC4806}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeoStream.Sharp.CLI", "GeoStream.Sharp.CLI\GeoStream.Sharp.CLI.csproj", "{59DB5417-362F-4149-846C-778995841AD5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CD7492EC-5F9F-4D09-882D-A169A8DC4806}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD7492EC-5F9F-4D09-882D-A169A8DC4806}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD7492EC-5F9F-4D09-882D-A169A8DC4806}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD7492EC-5F9F-4D09-882D-A169A8DC4806}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59DB5417-362F-4149-846C-778995841AD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59DB5417-362F-4149-846C-778995841AD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59DB5417-362F-4149-846C-778995841AD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59DB5417-362F-4149-846C-778995841AD5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
